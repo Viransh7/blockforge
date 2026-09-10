@@ -1,0 +1,32 @@
+export const THEME_DARK = {
+  background: "#111827",
+  board: "#1f2937",
+  board_shade: "#4b5563",
+  button: "#cbd5e1",
+  button_shade: "#475569",
+  button_text: "#1f2937",
+  control_focus: "#000000",
+  outline: "#f97316",
+  text: "#d1d5db",
+  shape_i: "#dc2626",
+  shape_j: "#f97316",
+  shape_l: "#14b8a6",
+  shape_o: "#0ea5e9",
+  shape_s: "#8b5cf6",
+  shape_t: "#ec4899",
+  shape_z: "#eab308",
+  shape_full: "#ffffff",
+};
+
+export const THEME_LIGHT = {
+  ...THEME_DARK,
+  background: "#f3f4f6",
+  board: "#d4d4d8",
+  board_shade: "#71717a",
+  button: "#cbd5e1",
+  button_shade: "#475568",
+  button_text: "#1f2937",
+  control_focus: "#ffffff",
+  shape_full: "#000000",
+  text: "#1f2937",
+};

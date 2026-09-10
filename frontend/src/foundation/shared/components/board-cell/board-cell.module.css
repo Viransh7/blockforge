@@ -1,16 +1,16 @@
 .board_cell {
-  width: calc(var(--board-height) / 20 - var(--board-remainder));
-  height: calc(var(--board-height) / 20 - var(--board-remainder));
+  flex: 0 0 calc((100% - 9 * var(--board-gap)) / 10);
+  aspect-ratio: 1;
 }
 
 .board_cell-initial {
-  @apply bg-text;
+  background-color: var(--text);
   background-size: 6px 6px;
   background-image: repeating-linear-gradient(
     45deg,
-    theme("colors.board_shade") 0,
-    theme("colors.board") 2px,
-    theme("colors.board") 0,
-    theme("colors.board_shade") 50%
+    var(--board_shade) 0,
+    var(--board) 2px,
+    var(--board) 0,
+    var(--board_shade) 50%
   );
 }

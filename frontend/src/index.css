@@ -109,3 +109,425 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* BlockForge gameplay sizing */
+.blockforge-game {
+  --board-height: min(88vh, 780px);
+  --board-gap: 4px;
+  --board-remainder: 4.5px;
+
+  --board: #1f2937;
+  --board_shade: #4b5563;
+  --text: #d1d5db;
+  --shape_i: #dc2626;
+  --shape_j: #f97316;
+  --shape_l: #14b8a6;
+  --shape_o: #0ea5e9;
+  --shape_s: #8b5cf6;
+  --shape_t: #ec4899;
+  --shape_z: #eab308;
+  --shape_full: #ffffff;
+}
+
+.bg-board {
+  background-color: var(--board);
+}
+
+.bg-shape_i {
+  background-color: var(--shape_i);
+}
+
+.bg-shape_j {
+  background-color: var(--shape_j);
+}
+
+.bg-shape_l {
+  background-color: var(--shape_l);
+}
+
+.bg-shape_o {
+  background-color: var(--shape_o);
+}
+
+.bg-shape_s {
+  background-color: var(--shape_s);
+}
+
+.bg-shape_t {
+  background-color: var(--shape_t);
+}
+
+.bg-shape_z {
+  background-color: var(--shape_z);
+}
+
+.bg-shape_full {
+  background-color: var(--shape_full);
+}
+
+.blockforge-board {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blockforge-game-over {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.blockforge-game-over-card {
+  width: min(390px, 90%);
+  padding: 42px 36px;
+  box-sizing: border-box;
+  border: 1px solid #475569;
+  border-radius: 18px;
+  background: rgba(11, 17, 32, 0.96);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+.blockforge-game-over-label {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.blockforge-game-over-card h2 {
+  margin: 28px 0 4px;
+  font-size: 56px;
+  line-height: 1;
+}
+
+.blockforge-game-over-score-label {
+  margin: 0 0 32px;
+  color: #9ca3af;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.blockforge-game-over-card button {
+  width: 100%;
+  padding: 15px 20px;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #f3f4f6;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.blockforge-game-over-card button:hover {
+  background: #334155;
+  border-color: #60a5fa;
+}
+
+.blockforge-game-over-card button:active {
+  transform: translateY(1px);
+}
+
+.blockforge-layout {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto minmax(180px, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.blockforge-panel {
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blockforge-panel-left {
+  flex-direction: column;
+  gap: 24px;
+}
+
+.blockforge-panel-placeholder {
+  width: 100%;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #374151;
+  border-radius: 12px;
+  color: #9ca3af;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.next-piece {
+  width: 100%;
+  text-align: center;
+}
+
+.next-piece h2 {
+  margin: 0 0 20px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.next-piece-grid {
+  width: 128px;
+  height: 64px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 4px;
+}
+
+.next-piece-cell {
+  width: 28px;
+  height: 28px;
+}
+
+.game-stats {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.game-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px;
+  border-bottom: 1px solid #374151;
+}
+
+.game-stat:last-child {
+  border-bottom: none;
+}
+
+.game-stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #9ca3af;
+}
+
+.game-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: #f3f4f6;
+}
+
+/* ========================================
+   BlockForge Visual Foundation
+   ======================================== */
+
+:root {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #0b1120;
+  color: #e5e7eb;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.blockforge-game {
+  width: 100%;
+  min-height: calc(100vh - 90px);
+  box-sizing: border-box;
+  padding: 24px 32px 32px;
+}
+
+/* ========================================
+   BlockForge Header
+   ======================================== */
+
+.blockforge-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 24px;
+  margin-bottom: 28px;
+}
+
+.blockforge-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.blockforge-brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 2px solid #f97316;
+  border-radius: 8px;
+  color: #f97316;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.blockforge-brand h1 {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.blockforge-tagline {
+  margin: 0;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 4px;
+}
+
+/* ========================================
+   BlockForge Controls
+   ======================================== */
+
+.game-control-button,
+.blockforge-panel-left > button {
+  min-width: 140px;
+  padding: 11px 20px;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  background: #1f2937;
+  color: #e5e7eb;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.game-control-button:hover,
+.blockforge-panel-left > button:hover {
+  background: #374151;
+  border-color: #f97316;
+}
+
+.game-control-button:active,
+.blockforge-panel-left > button:active {
+  transform: translateY(1px);
+}
+
+.game-control-button:focus-visible,
+.blockforge-panel-left > button:focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 3px;
+}
+
+/* ========================================
+   BlockForge Side Panels
+   ======================================== */
+
+.blockforge-panel {
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.35);
+  padding: 28px 24px;
+}
+
+.blockforge-panel-left {
+  flex-direction: column;
+  gap: 24px;
+}
+
+.blockforge-panel-right {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.blockforge-panel button {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* BlockForge controls */
+.blockforge-controls-info {
+  margin-top: 32px;
+  width: 100%;
+}
+
+.blockforge-controls-info h2 {
+  margin-bottom: 18px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.blockforge-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 9px 0;
+  font-size: 15px;
+  letter-spacing: 0.8px;
+}
+
+.blockforge-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 28px;
+  padding: 0 7px;
+  border: 1px solid #475569;
+  border-radius: 5px;
+  background: #1e293b;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.blockforge-key-space {
+  min-width: 58px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}

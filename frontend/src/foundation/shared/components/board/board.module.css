@@ -1,5 +1,6 @@
 .board {
-  @apply flex flex-wrap;
+  display: flex;
+  flex-wrap: wrap;
   height: var(--board-height);
   aspect-ratio: 1 / 2;
   padding: var(--board-gap);

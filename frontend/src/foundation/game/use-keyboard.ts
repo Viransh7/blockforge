@@ -2,19 +2,53 @@ import { useCallback, useEffect } from "react";
 
 import { useGameCallbacks, useGameContext } from "@/context/game";
 import { GameStatus } from "@/shared/constants/game";
-import { KEYS_BOTTOM, KEYS_LEFT, KEYS_PAUSE, KEYS_RIGHT, KEYS_ROTATE } from "@/shared/constants/keyboard";
+import {
+  KEYS_BOTTOM,
+  KEYS_LEFT,
+  KEYS_PAUSE,
+  KEYS_RIGHT,
+  KEYS_ROTATE,
+} from "@/shared/constants/keyboard";
 
 export function useKeyboardGame() {
   const {
     state: { status },
   } = useGameContext();
-  const { onDropStart, onDropStop, onMove, onPause, onRotate } = useGameCallbacks();
+
+  const {
+    onDropStart,
+    onDropStop,
+    onMove,
+    onPause,
+    onRotate,
+    onUnpause,
+    onFinishedCountdown,
+  } = useGameCallbacks();
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (KEYS_PAUSE.includes(e.key)) {
-        onPause?.();
-      } else if (KEYS_BOTTOM.includes(e.key)) {
+        e.preventDefault();
+
+        if (e.repeat) {
+          return;
+        }
+
+        if (status === GameStatus.PLAYING) {
+          onPause?.();
+        } else if (status === GameStatus.PAUSED) {
+          onUnpause?.();
+          onFinishedCountdown?.();
+        }
+
+        return;
+      }
+
+      if (status !== GameStatus.PLAYING) {
+        return;
+      }
+
+      if (KEYS_BOTTOM.includes(e.key)) {
         onDropStart?.();
       } else if (KEYS_ROTATE.includes(e.key)) {
         onRotate?.();
@@ -24,8 +58,17 @@ export function useKeyboardGame() {
         onMove?.(1);
       }
     },
-    [onDropStart, onMove, onPause, onRotate]
+    [
+      onDropStart,
+      onMove,
+      onPause,
+      onRotate,
+      onUnpause,
+      onFinishedCountdown,
+      status,
+    ]
   );
+
   const onKeyUp = useCallback(
     (e: KeyboardEvent) => {
       if (KEYS_BOTTOM.includes(e.key)) {
@@ -35,19 +78,18 @@ export function useKeyboardGame() {
     [onDropStop]
   );
 
-  const isPlaying = status === GameStatus.PLAYING;
+  const canUseKeyboard =
+    status === GameStatus.PLAYING || status === GameStatus.PAUSED;
+
   useEffect(() => {
-    if (isPlaying) {
+    if (canUseKeyboard) {
       window.addEventListener("keydown", onKeyDown);
       window.addEventListener("keyup", onKeyUp);
-    } else {
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
     }
 
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
     };
-  }, [isPlaying, onKeyDown, onKeyUp]);
+  }, [canUseKeyboard, onKeyDown, onKeyUp]);
 }

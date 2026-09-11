@@ -1,19 +1,29 @@
 import { useMemo } from "react";
 
+import { useGameContext } from "@/context/game";
 import { Board } from "@/shared/components/board";
 import { getBoardCells } from "@/shared/utils/get-board-cells";
 
-import { useGameContext } from "@/context/game";
 import { SwipeOverlay } from "./swipe/swipe";
 import { useKeyboardGame } from "./use-keyboard";
 import { useTick } from "./use-tick";
 
-export const Game = () => {
+type GameProps = {
+  onResume?: () => void;
+};
+
+export const Game = ({ onResume }: GameProps) => {
   const { state } = useGameContext();
   const boardCells = useMemo(() => getBoardCells(state), [state]);
 
   useTick();
-  useKeyboardGame();
+  useKeyboardGame({ onResume });
 
-  return <Board cells={boardCells} classNameBoard="bg-board" overlay={<SwipeOverlay />} />;
+  return (
+    <Board
+      cells={boardCells}
+      classNameBoard="bg-board"
+      overlay={<SwipeOverlay />}
+    />
+  );
 };

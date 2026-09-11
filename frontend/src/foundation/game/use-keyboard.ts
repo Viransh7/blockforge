@@ -10,7 +10,13 @@ import {
   KEYS_ROTATE,
 } from "@/shared/constants/keyboard";
 
-export function useKeyboardGame() {
+type UseKeyboardGameProps = {
+  onResume?: () => void;
+};
+
+export function useKeyboardGame({
+  onResume,
+}: UseKeyboardGameProps = {}) {
   const {
     state: { status },
   } = useGameContext();
@@ -37,6 +43,7 @@ export function useKeyboardGame() {
         if (status === GameStatus.PLAYING) {
           onPause?.();
         } else if (status === GameStatus.PAUSED) {
+          onResume?.();
           onUnpause?.();
           onFinishedCountdown?.();
         }
@@ -49,12 +56,16 @@ export function useKeyboardGame() {
       }
 
       if (KEYS_BOTTOM.includes(e.key)) {
+        e.preventDefault();
         onDropStart?.();
       } else if (KEYS_ROTATE.includes(e.key)) {
+        e.preventDefault();
         onRotate?.();
       } else if (KEYS_LEFT.includes(e.key)) {
+        e.preventDefault();
         onMove?.(-1);
       } else if (KEYS_RIGHT.includes(e.key)) {
+        e.preventDefault();
         onMove?.(1);
       }
     },
@@ -62,6 +73,7 @@ export function useKeyboardGame() {
       onDropStart,
       onMove,
       onPause,
+      onResume,
       onRotate,
       onUnpause,
       onFinishedCountdown,
@@ -72,6 +84,7 @@ export function useKeyboardGame() {
   const onKeyUp = useCallback(
     (e: KeyboardEvent) => {
       if (KEYS_BOTTOM.includes(e.key)) {
+        e.preventDefault();
         onDropStop?.();
       }
     },

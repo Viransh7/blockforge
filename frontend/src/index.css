@@ -531,3 +531,73 @@ body {
   font-size: 11px;
   letter-spacing: 0.5px;
 }
+
+.game-controls {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.blockforge-difficulty-options {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.blockforge-difficulty {
+  width: 100%;
+  text-align: center;
+}
+
+.blockforge-difficulty h2 {
+  margin: 0 0 16px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.blockforge-difficulty-options {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.blockforge-difficulty-button {
+  padding: 9px 12px;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  background: #1e293b;
+  color: #9ca3af;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.blockforge-difficulty-button:hover {
+  background: #334155;
+  border-color: #64748b;
+  color: #f3f4f6;
+}
+
+.blockforge-difficulty-button.active {
+  background: #f97316;
+  border-color: #f97316;
+  color: #0b1120;
+}
+
+.blockforge-difficulty-button:active {
+  transform: translateY(1px);
+}
+
+.blockforge-difficulty-button:focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 3px;
+}

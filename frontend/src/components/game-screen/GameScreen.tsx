@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useAppCallbacks } from "../../foundation/context/app";
 import {
@@ -36,6 +36,13 @@ export const DIFFICULTY_CONFIG: Record<
 };
 
 function GameScreen() {
+  const [gameDuration, setGameDuration] = useState(0);
+  const gameStartTime = useRef<number | null>(null);
+  const pausedAt = useRef<number | null>(null);
+  const pausedDuration = useRef(0);
+
+  const [leaderboardRefreshKey, setLeaderboardRefreshKey] = useState(0);
+
   const {
     state: { status },
   } = useGameContext();
@@ -51,6 +58,79 @@ function GameScreen() {
   const [activeDifficulty, setActiveDifficulty] =
     useState<Difficulty>("NORMAL");
 
+  useEffect(() => {
+    if (status === GameStatus.PLAYING) {
+      if (gameStartTime.current === null) {
+        gameStartTime.current = Date.now();
+      }
+
+      if (pausedAt.current !== null) {
+        pausedDuration.current += Date.now() - pausedAt.current;
+        pausedAt.current = null;
+      }
+
+      const updateDuration = () => {
+        if (gameStartTime.current === null) {
+          return;
+        }
+
+        const elapsed =
+          Date.now() -
+          gameStartTime.current -
+          pausedDuration.current;
+
+        setGameDuration(Math.floor(elapsed / 1000));
+      };
+
+      updateDuration();
+
+      const interval = setInterval(updateDuration, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+
+    if (status === GameStatus.PAUSED) {
+      if (
+        gameStartTime.current !== null &&
+        pausedAt.current === null
+      ) {
+        pausedAt.current = Date.now();
+      }
+
+      return;
+    }
+
+    if (status === GameStatus.FINISHED) {
+      if (
+        gameStartTime.current !== null &&
+        pausedAt.current !== null
+      ) {
+        pausedDuration.current += Date.now() - pausedAt.current;
+        pausedAt.current = null;
+      }
+
+      if (gameStartTime.current !== null) {
+        const elapsed =
+          Date.now() -
+          gameStartTime.current -
+          pausedDuration.current;
+
+        setGameDuration(Math.floor(elapsed / 1000));
+      }
+
+      return;
+    }
+
+    if (status === GameStatus.IDLE) {
+      gameStartTime.current = null;
+      pausedAt.current = null;
+      pausedDuration.current = 0;
+      setGameDuration(0);
+    }
+  }, [status]);
+
   const applyDifficulty = (difficulty: Difficulty) => {
     const config = DIFFICULTY_CONFIG[difficulty];
 
@@ -62,6 +142,11 @@ function GameScreen() {
 
   const startGameWithDifficulty = (difficulty: Difficulty) => {
     const config = DIFFICULTY_CONFIG[difficulty];
+
+    gameStartTime.current = null;
+    pausedAt.current = null;
+    pausedDuration.current = 0;
+    setGameDuration(0);
 
     applyDifficulty(difficulty);
     onPlay(config.rows);
@@ -82,6 +167,10 @@ function GameScreen() {
 
   const handlePlayAgain = () => {
     startGameWithDifficulty(pendingDifficulty);
+  };
+
+  const handleScoreSubmitted = () => {
+    setLeaderboardRefreshKey((current) => current + 1);
   };
 
   return (
@@ -114,11 +203,20 @@ function GameScreen() {
 
         <div className="blockforge-board">
           <Game onResume={handleResume} />
-          <GameOver onPlayAgain={handlePlayAgain} />
+
+          <GameOver
+            onPlayAgain={handlePlayAgain}
+            gameDuration={gameDuration}
+            difficulty={activeDifficulty}
+            onScoreSubmitted={handleScoreSubmitted}
+          />
         </div>
 
         <aside className="blockforge-panel blockforge-panel-right">
-          <GameStats />
+          <GameStats
+            difficulty={activeDifficulty}
+            refreshKey={leaderboardRefreshKey}
+          />
         </aside>
       </div>
     </section>

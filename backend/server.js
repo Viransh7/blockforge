@@ -1,4 +1,5 @@
 require("dotenv").config();
+const cors = require("cors");
 
 const express = require("express");
 const connectDB = require("./config/db");
@@ -10,6 +11,7 @@ const PORT = 3000;
 connectDB();
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/api/health", (req, res) => {
   res.json({

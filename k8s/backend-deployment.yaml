@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blockforge-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blockforge-backend
+  template:
+    metadata:
+      labels:
+        app: blockforge-backend
+    spec:
+      containers:
+        - name: backend
+          image: blockforge-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: blockforge-backend-secret

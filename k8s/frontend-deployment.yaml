@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blockforge-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blockforge-frontend
+  template:
+    metadata:
+      labels:
+        app: blockforge-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: blockforge-frontend:k8s-v2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
